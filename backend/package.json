@@ -1,0 +1,25 @@
+{
+  "name": "ai-dataset-repository-backend",
+  "version": "1.0.0",
+  "description": "Express.js and MySQL backend for AI Dataset Repository with Secure Access Control",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node test/api-test.js && node test/auth-rbac-test.js && node test/dataset-storage-test.js && node test/recommendation-test.js",
+    "seed:users": "node src/scripts/seedUsers.js",
+    "test:api": "node test/api-test.js",
+    "test:auth": "node test/auth-rbac-test.js",
+    "test:storage": "node test/dataset-storage-test.js",
+    "test:recommend": "node test/recommendation-test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0"
+  }
+}
