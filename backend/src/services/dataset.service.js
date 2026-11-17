@@ -42,9 +42,54 @@ class DatasetService {
     }
 
     if (search && search.trim()) {
-      whereClauses.push('(d.dataset_name LIKE ? OR d.description LIKE ?)');
-      const term = `%${search.trim()}%`;
-      params.push(term, term);
+      const rawSearch = search.trim();
+      const lower = rawSearch.toLowerCase();
+      const genericAiTerms = [
+        'machine learning', 'machine-learning', 'machinelearning',
+        'ml', 'ai', 'ai/ml', 'aiml', 'artificial intelligence',
+        'data science', 'datascience', 'dataset', 'datasets',
+        'benchmark', 'model', 'algorithm'
+      ];
+
+      // If user searches general repository terms like "machine learning", "ml", "ai"
+      if (genericAiTerms.includes(lower)) {
+        whereClauses.push(`(
+          d.dataset_name LIKE ? OR 
+          d.description LIKE ? OR 
+          d.domain LIKE ? OR 
+          d.task_type LIKE ? OR
+          EXISTS (
+            SELECT 1 FROM Categories c WHERE c.category_id = d.category_id AND c.name LIKE ?
+          ) OR
+          EXISTS (
+            SELECT 1 FROM Dataset_Tags dt 
+            JOIN Tags t ON dt.tag_id = t.tag_id 
+            WHERE dt.dataset_id = d.dataset_id AND (t.name LIKE ? OR t.name IN ('machine-learning', 'ai', 'classification', 'regression'))
+          ) OR
+          1 = 1
+        )`);
+        const term = `%${rawSearch}%`;
+        params.push(term, term, term, term, term, term);
+      } else {
+        // Multi-field search across title, description, domain, task_type, data_type, category, and tags
+        const term = `%${rawSearch}%`;
+        whereClauses.push(`(
+          d.dataset_name LIKE ? OR 
+          d.description LIKE ? OR 
+          d.domain LIKE ? OR 
+          d.task_type LIKE ? OR 
+          d.data_type LIKE ? OR
+          EXISTS (
+            SELECT 1 FROM Categories c WHERE c.category_id = d.category_id AND c.name LIKE ?
+          ) OR
+          EXISTS (
+            SELECT 1 FROM Dataset_Tags dt 
+            JOIN Tags t ON dt.tag_id = t.tag_id 
+            WHERE dt.dataset_id = d.dataset_id AND t.name LIKE ?
+          )
+        )`);
+        params.push(term, term, term, term, term, term, term);
+      }
     }
 
     if (domain) {

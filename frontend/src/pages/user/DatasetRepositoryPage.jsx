@@ -68,7 +68,7 @@ export default function DatasetRepositoryPage() {
     fetchDatasets();
   };
 
-  const handleResetFilters = () => {
+  const handleResetFilters = async () => {
     setSearch('');
     setDomain('');
     setTaskType('');
@@ -77,6 +77,16 @@ export default function DatasetRepositoryPage() {
     setCategoryId('');
     setSort('newest');
     setPage(1);
+    setLoading(true);
+    try {
+      const res = await api.get('/datasets?sort=newest&page=1&limit=9');
+      setDatasets(res.data || []);
+      setPagination(res.meta || { total: res.data?.length || 0, totalPages: 1 });
+    } catch (err) {
+      console.error('Failed to reset dataset filters:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDownload = async (datasetId, datasetName) => {

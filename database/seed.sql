@@ -61,7 +61,7 @@ INSERT INTO Datasets (
 (
     1,
     'Iris',
-    'Perhaps the best known database to be found in the pattern recognition literature. Created by R.A. Fisher, this dataset contains 3 classes of 50 instances each, where each class refers to a type of iris plant (Setosa, Versicolour, and Virginica). Predicted attribute is the species.',
+    'The foundational benchmark machine learning classification dataset created by Ronald Fisher from the UCI Machine Learning Repository. Widely used for evaluating supervised learning algorithms, featuring 150 instances of iris flowers across 3 species (Setosa, Versicolour, Virginica) with 4 sepal and petal measurements.',
     'https://archive.ics.uci.edu/dataset/53/iris',
     'Creative Commons Attribution 4.0 International (CC BY 4.0)',
     'iris.csv',
@@ -82,7 +82,7 @@ INSERT INTO Datasets (
 (
     2,
     'Heart Disease (Cleveland)',
-    'Clinical database originating from the Cleveland Clinic Foundation (Dr. Robert Detrano). It contains 76 raw attributes, though all published ML experiments use a subset of 14 clinical features. The target field refers to the presence of heart disease in the patient on an angiographic status scale from 0 (absence) to 4.',
+    'Classic machine learning clinical diagnostic benchmark dataset from the Cleveland Clinic Foundation (Dr. Robert Detrano) and UCI Machine Learning Repository. Features 14 clinical attributes used for predictive healthcare modeling and binary/multiclass classification of heart disease.',
     'https://archive.ics.uci.edu/dataset/45/heart+disease',
     'Creative Commons Attribution 4.0 International (CC BY 4.0)',
     'heart_disease.csv',
@@ -103,7 +103,7 @@ INSERT INTO Datasets (
 (
     3,
     'Wine Quality',
-    'Two datasets related to red and white variants of the Portuguese "Vinho Verde" wine by Paulo Cortez et al. Inputs include 11 objective physicochemical tests (fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, density, pH, sulphates, alcohol) and the output is sensory quality score (0 to 10).',
+    'Machine learning benchmark datasets for regression and classification by Paulo Cortez et al. from the UCI Machine Learning Repository. Evaluates sensory quality scores of Portuguese Vinho Verde wine variants using 11 objective physicochemical features.',
     'https://archive.ics.uci.edu/dataset/186/wine+quality',
     'Creative Commons Attribution 4.0 International (CC BY 4.0)',
     'wine_quality.zip',
@@ -124,7 +124,7 @@ INSERT INTO Datasets (
 (
     4,
     'Breast Cancer Wisconsin (Diagnostic)',
-    'Features are computed from a digitized image of a fine needle aspirate (FNA) of a breast mass, describing characteristics of the cell nuclei present in the image (computed by Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian). Features include radius, texture, perimeter, area, smoothness, compactness, concavity, and symmetry. Target is diagnosis: Malignant or Benign.',
+    'Widely cited machine learning oncology benchmark dataset from the UCI Machine Learning Repository by Dr. William H. Wolberg, W. Nick Street, and Olvi L. Mangasarian. Employs 30 real-valued features computed from fine needle aspirate (FNA) images for cancer classification (malignant vs benign).',
     'https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic',
     'Creative Commons Attribution 4.0 International (CC BY 4.0)',
     'breast_cancer_wisconsin.csv',
@@ -145,7 +145,7 @@ INSERT INTO Datasets (
 (
     5,
     'Student Performance',
-    'Approaches student achievement in secondary education of two Portuguese schools by Paulo Cortez and Alice Silva. The data attributes include student grades, demographic, social and school-related features collected using school reports and questionnaires. Target is final year grade (G3).',
+    'Benchmark machine learning dataset for predictive modeling and regression from the UCI Machine Learning Repository by Paulo Cortez and Alice Silva. Evaluates student academic achievement in secondary education using demographic, social, and academic attributes.',
     'https://archive.ics.uci.edu/dataset/320/student+performance',
     'Creative Commons Attribution 4.0 International (CC BY 4.0)',
     'student_performance.csv',
@@ -163,7 +163,7 @@ INSERT INTO Datasets (
     3,
     4
 )
-ON DUPLICATE KEY UPDATE dataset_name=VALUES(dataset_name);
+ON DUPLICATE KEY UPDATE dataset_name=VALUES(dataset_name), description=VALUES(description);
 
 -- ----------------------------------------------------------------------------
 -- 4. TAGS SEED DATA
@@ -183,7 +183,11 @@ INSERT INTO Tags (tag_id, name) VALUES
 (12, 'diagnostic'),
 (13, 'education'),
 (14, 'social-sciences'),
-(15, 'regression')
+(15, 'regression'),
+(16, 'machine-learning'),
+(17, 'ai'),
+(18, 'data-science'),
+(19, 'benchmark')
 ON DUPLICATE KEY UPDATE name=VALUES(name);
 
 -- ----------------------------------------------------------------------------
@@ -191,15 +195,15 @@ ON DUPLICATE KEY UPDATE name=VALUES(name);
 -- ----------------------------------------------------------------------------
 INSERT INTO Dataset_Tags (dataset_id, tag_id) VALUES
 -- Iris
-(1, 1), (1, 2), (1, 3), (1, 4),
+(1, 1), (1, 2), (1, 3), (1, 4), (1, 16), (1, 17), (1, 19),
 -- Heart Disease
-(2, 2), (2, 5), (2, 6), (2, 7),
+(2, 2), (2, 5), (2, 6), (2, 7), (2, 16), (2, 17), (2, 19),
 -- Wine Quality
-(3, 2), (3, 8), (3, 9), (3, 10),
+(3, 2), (3, 8), (3, 9), (3, 10), (3, 16), (3, 17), (3, 19),
 -- Breast Cancer Wisconsin
-(4, 2), (4, 7), (4, 11), (4, 12),
+(4, 2), (4, 7), (4, 11), (4, 12), (4, 16), (4, 17), (4, 19),
 -- Student Performance
-(5, 13), (5, 14), (5, 15)
+(5, 13), (5, 14), (5, 15), (5, 16), (5, 17), (5, 19)
 ON DUPLICATE KEY UPDATE dataset_id=VALUES(dataset_id);
 
 -- ----------------------------------------------------------------------------
